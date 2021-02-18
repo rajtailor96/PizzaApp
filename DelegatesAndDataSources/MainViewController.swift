@@ -8,9 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController,BeverageViewControllerDelegate, PizzaViewControllerDelegate {
-    
-    
+class MainViewController: UIViewController,BeverageViewControllerDelegate, PizzaViewControllerDelegate, DessertViewControllerDelegate {
     @IBOutlet weak var orderView: UIView!
     var orderedItems = OrderList()
     var orderTableVC = OrderTableViewController()
@@ -25,8 +23,7 @@ class MainViewController: UIViewController,BeverageViewControllerDelegate, Pizza
     }
 
     //MARK: - Delegates and Data Sources
-    
-    
+
     
     func didChooseBeverage(beverage: OrderItem) {
         orderedItems.add(orderItem: beverage)
@@ -41,8 +38,20 @@ class MainViewController: UIViewController,BeverageViewControllerDelegate, Pizza
         
     }
     
+    func didChooseDessert(dessertItm: OrderItem) {
+        orderedItems.add(orderItem: dessertItm)
+        orderTableVC.updateTable(orderList: orderedItems)
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Desserts"{
+            let vc = segue.destination as! DessertViewController
+            vc.lastSelection = orderedItems.lastSelection
+            vc.delegate = self
+            
+        }
+        
         if segue.identifier == "beverage"{
             let beverageViewController = segue.destination as! BeverageViewController
             beverageViewController.delegate = self
